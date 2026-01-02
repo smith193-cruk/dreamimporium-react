@@ -446,8 +446,8 @@ export default function App() {
                   <a className="socialLink" href={ETSY_SHOP_URL} target="_blank" rel="noreferrer">
                     Etsy → Dreamimporium ↗
                   </a>
-                  <a className="socialLink" href="mailto:hello@dreamimporium.com">
-                    Email → hello@dreamimporium.com
+                  <a className="socialLink" href="mailto:contact@dreamimporium.co.uk">
+                    Email → contact@dreamimporium.co.uk
                   </a>
                 </div>
               </div>
