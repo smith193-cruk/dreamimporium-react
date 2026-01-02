@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.958.0",
-    "aws-amplify": "^6.15.9",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "aws-amplify": "6.15.9",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.19.0",
