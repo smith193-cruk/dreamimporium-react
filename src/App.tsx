@@ -2,12 +2,10 @@ import { useMemo, useState } from "react";
 import "./App.css";
 import logo from "./assets/logo.png";
 
-// ✅ add these
 import g1 from "./assets/gallery/coasters.png";
 import g2 from "./assets/gallery/bunny.png";
 import g3 from "./assets/gallery/charm.png";
 import g4 from "./assets/gallery/decals.png";
-
 
 type Service = {
   title: string;
@@ -22,12 +20,18 @@ type GalleryItem = {
   note: string;
   url: string;
   store: "Etsy" | "Made.me";
-  imageSrc: string; // ✅ thumbnail
-  imageAlt: string; // ✅ accessibility
+  imageSrc: string;
+  imageAlt: string;
 };
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // ✅ ADD THESE (you were missing them)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [techniques, setTechniques] = useState("");
 
   const services: Service[] = useMemo(
     () => [
@@ -60,49 +64,49 @@ export default function App() {
   );
 
   const ETSY_SHOP_URL = "https://www.etsy.com/shop/Dreamimporium";
-  const MADE_SHOP_URL = "https://made.me/your-shop"; // ⬅️ replace when you have it
+  const MADE_SHOP_URL = "https://made.me/your-shop"; // replace when ready
+
   const gallery: GalleryItem[] = useMemo(
-  () => [
-    {
-      title: "Moonlit Resin Coasters",
-      tag: "Resin",
-      note: "Deep blues + gold flecks",
-      store: "Etsy",
-      url: "https://www.etsy.com/listing/XXXXXXXXXX",
-      imageSrc: g1,
-      imageAlt: "Moonlit resin coasters with deep blue tones and gold flecks",
-    },
-    {
-      title: "Felted Bunny Keepsake",
-      tag: "Needle Felt",
-      note: "Soft texture, tiny details",
-      store: "Made.me",
-      url: "https://made.me/your-shop/your-item-slug",
-      imageSrc: g2,
-      imageAlt: "Needle-felted bunny keepsake with soft texture",
-    },
-    {
-      title: "Custom 3D Printed Charm",
-      tag: "3D Print",
-      note: "Designed from sketch to print",
-      store: "Etsy",
-      url: "https://www.etsy.com/listing/YYYYYYYYYY",
-      imageSrc: g3,
-      imageAlt: "Custom 3D printed charm",
-    },
-    {
-      title: "Personalised Name Decals",
-      tag: "Vinyl Decal",
-      note: "Clean cut + durable",
-      store: "Made.me",
-      url: "https://made.me/your-shop/another-item",
-      imageSrc: g4,
-      imageAlt: "Vinyl decal name labels in a clean style",
-    },
+    () => [
+      {
+        title: "Moonlit Resin Coasters",
+        tag: "Resin",
+        note: "Deep blues + gold flecks",
+        store: "Etsy",
+        url: "https://www.etsy.com/listing/XXXXXXXXXX",
+        imageSrc: g1,
+        imageAlt: "Moonlit resin coasters with deep blue tones and gold flecks",
+      },
+      {
+        title: "Felted Bunny Keepsake",
+        tag: "Needle Felt",
+        note: "Soft texture, tiny details",
+        store: "Made.me",
+        url: "https://made.me/your-shop/your-item-slug",
+        imageSrc: g2,
+        imageAlt: "Needle-felted bunny keepsake with soft texture",
+      },
+      {
+        title: "Custom 3D Printed Charm",
+        tag: "3D Print",
+        note: "Designed from sketch to print",
+        store: "Etsy",
+        url: "https://www.etsy.com/listing/YYYYYYYYYY",
+        imageSrc: g3,
+        imageAlt: "Custom 3D printed charm",
+      },
+      {
+        title: "Personalised Name Decals",
+        tag: "Vinyl Decal",
+        note: "Clean cut + durable",
+        store: "Made.me",
+        url: "https://made.me/your-shop/another-item",
+        imageSrc: g4,
+        imageAlt: "Vinyl decal name labels in a clean style",
+      },
     ],
     []
   );
-
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -146,6 +150,12 @@ export default function App() {
 
         {menuOpen && (
           <div className="container mobileMenu" role="dialog" aria-label="Mobile menu">
+            <a className="mobileLink" href={ETSY_SHOP_URL} target="_blank" rel="noreferrer">
+              Shop on Etsy ↗
+            </a>
+            <a className="mobileLink" href={MADE_SHOP_URL} target="_blank" rel="noreferrer">
+              Shop on Made.me ↗
+            </a>
             <button className="mobileLink" onClick={() => scrollTo("services")}>Services</button>
             <button className="mobileLink" onClick={() => scrollTo("process")}>Process</button>
             <button className="mobileLink" onClick={() => scrollTo("gallery")}>Gallery</button>
@@ -321,7 +331,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* Contact */}
+        {/* ✅ Contact (fixed nesting: BOTH cards inside the same contactGrid) */}
         <section id="contact" className="sectionAlt">
           <div className="container">
             <div className="sectionHeader">
@@ -332,36 +342,74 @@ export default function App() {
             <div className="contactGrid">
               <div className="contactCard">
                 <h3 className="h3">Custom Order Request</h3>
-                <p className="p">
-                  If you’ve wired your form to Amplify (DB + email), replace this placeholder submit handler.
-                </p>
+                <p className="p">Tell us what you’d like made and we’ll get back to you shortly.</p>
 
                 <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Hook this form up to your Amplify API endpoint when ready.");
-                  }}
                   className="form"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+
+                    try {
+                      const apiBase = import.meta.env.VITE_CONTACT_API_URL;
+                      if (!apiBase) throw new Error("Missing VITE_CONTACT_API_URL env var");
+
+                      const res = await fetch(apiBase + "/contact", {
+                        method: "POST",
+                        headers: { "content-type": "application/json" },
+                        body: JSON.stringify({ name, email, message, techniques }),
+                      });
+
+                      const out = await res.json().catch(() => ({}));
+
+                      if (!res.ok || !out.ok) {
+                        throw new Error(out.error ?? `Request failed (${res.status})`);
+                      }
+
+                      alert("Thanks! Your message has been sent ✨");
+
+                      setName("");
+                      setEmail("");
+                      setMessage("");
+                      setTechniques("");
+                    } catch (err: any) {
+                      alert(err?.message ?? "Something went wrong. Please try again.");
+                    }
+                  }}
                 >
                   <label className="label">
                     Name
-                    <input className="input" placeholder="Your name" required />
+                    <input className="input" value={name} onChange={(e) => setName(e.target.value)} required />
                   </label>
+
                   <label className="label">
                     Email
-                    <input className="input" type="email" placeholder="you@example.com" required />
+                    <input
+                      className="input"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
                   </label>
+
                   <label className="label">
                     What would you like made?
                     <textarea
                       className="textarea"
-                      placeholder="Describe your idea, theme/vibe, colours, size, and any references."
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
                       required
                     />
                   </label>
+
                   <label className="label">
                     Preferred techniques
-                    <input className="input" placeholder="Resin / Needle Felting / 3D Print / Vinyl Decals (or 'not sure')" />
+                    <input
+                      className="input"
+                      placeholder="Resin / Needle Felting / 3D Print / Vinyl Decals (or not sure)"
+                      value={techniques}
+                      onChange={(e) => setTechniques(e.target.value)}
+                    />
                   </label>
 
                   <button className="primaryBtnLarge" type="submit">
@@ -394,11 +442,11 @@ export default function App() {
                   <a className="socialLink" href="#" onClick={(e) => e.preventDefault()}>
                     Instagram → @dreamimporium
                   </a>
-                  <a className="socialLink" href="#" onClick={(e) => e.preventDefault()}>
-                    Etsy → DreamImporium
+                  <a className="socialLink" href={ETSY_SHOP_URL} target="_blank" rel="noreferrer">
+                    Etsy → Dreamimporium ↗
                   </a>
-                  <a className="socialLink" href="mailto:contact@dreamimporium.com">
-                    Email → contact@dreamimporium.com
+                  <a className="socialLink" href="mailto:hello@dreamimporium.com">
+                    Email → hello@dreamimporium.com
                   </a>
                 </div>
               </div>
