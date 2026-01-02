@@ -86,17 +86,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
     return json(200, { ok: true, id: created.data?.id });
   } catch (err: any) {
-    console.error("submitContact error:", err);
-    return {
-      statusCode: 500,
-      headers: {
-        "content-type": "application/json",
-        "access-control-allow-origin": "*",
-      },
-      body: JSON.stringify({
-        ok: false,
-        error: err?.message ?? String(err),
-      }),
-    };
+    console.error(err);
+    return json(500, { ok: false, error: "Server error" });
   }
 };
