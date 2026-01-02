@@ -1,18 +1,29 @@
 version: 1
+
+backend:
+  phases:
+    build:
+      commands:
+        - npm ci --legacy-peer-deps
+        # Deploy Amplify Gen 2 backend for this branch/app
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+  artifacts:
+    baseDirectory: .
+    files:
+      - amplify_outputs.json
+
 frontend:
   phases:
     preBuild:
       commands:
-        - node -v
-        - npm -v
-        - npm install --legacy-peer-deps
+        - npm ci --legacy-peer-deps
     build:
       commands:
         - npm run build
   artifacts:
     baseDirectory: dist
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       - node_modules/**/*
