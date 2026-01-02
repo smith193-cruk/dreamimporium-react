@@ -351,6 +351,7 @@ export default function App() {
 
                     try {
                       const apiBase = import.meta.env.VITE_CONTACT_API_URL;
+                      console.log("CONTACT API:", apiBase, "POST:", `${apiBase}/contact`);
                       if (!apiBase) throw new Error("Missing VITE_CONTACT_API_URL env var");
 
                       const res = await fetch(apiBase + "/contact", {
