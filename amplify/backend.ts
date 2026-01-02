@@ -31,6 +31,3 @@ const integration = new LambdaIntegration(backend.submitContact.resources.lambda
 // Route: POST /contact
 const contact = api.root.addResource("contact");
 contact.addMethod("POST", integration);
-
-// Output the API URL into amplify_outputs.json
-
