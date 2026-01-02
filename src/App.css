@@ -242,6 +242,50 @@ body{
 .galleryBody{ padding: 12px; }
 .galleryTitleRow{ display:flex; align-items:center; justify-content: space-between; gap: 10px; }
 .galleryTitle{ font-weight: 800; }
+
+.galleryImageWrap{
+  position: relative;
+  height: 170px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+}
+.galleryImage{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 160ms ease;
+}
+.galleryLink:hover .galleryImage{
+  transform: scale(1.06);
+}
+
+.galleryOverlay{
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.shopBtn{
+  text-decoration: none;
+  color: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+.shopBtn:hover{
+  border-color: rgba(185,167,255,0.35);
+}
+
 .storePill{
   font-size: 12px;
   padding: 5px 8px;

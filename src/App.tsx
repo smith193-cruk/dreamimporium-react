@@ -2,6 +2,13 @@ import { useMemo, useState } from "react";
 import "./App.css";
 import logo from "./assets/logo.png";
 
+// ✅ add these
+import g1 from "./assets/gallery/coasters.png";
+import g2 from "./assets/gallery/bunny.png";
+import g3 from "./assets/gallery/charm.png";
+import g4 from "./assets/gallery/decals.png";
+
+
 type Service = {
   title: string;
   desc: string;
@@ -15,6 +22,8 @@ type GalleryItem = {
   note: string;
   url: string;
   store: "Etsy" | "Made.me";
+  imageSrc: string; // ✅ thumbnail
+  imageAlt: string; // ✅ accessibility
 };
 
 export default function App() {
@@ -50,40 +59,50 @@ export default function App() {
     []
   );
 
-  // ✅ Add your real links here
+  const ETSY_SHOP_URL = "https://www.etsy.com/shop/Dreamimporium";
+  const MADE_SHOP_URL = "https://made.me/your-shop"; // ⬅️ replace when you have it
   const gallery: GalleryItem[] = useMemo(
-    () => [
-      {
-        title: "Moonlit Resin Coasters",
-        tag: "Resin",
-        note: "Deep blues + gold flecks",
-        store: "Etsy",
-        url: "https://www.etsy.com/listing/XXXXXXXXXX",
-      },
-      {
-        title: "Felted Bunny Keepsake",
-        tag: "Needle Felt",
-        note: "Soft texture, tiny details",
-        store: "Made.me",
-        url: "https://made.me/your-shop/your-item-slug",
-      },
-      {
-        title: "Custom 3D Printed Charm",
-        tag: "3D Print",
-        note: "Designed from sketch to print",
-        store: "Etsy",
-        url: "https://www.etsy.com/listing/YYYYYYYYYY",
-      },
-      {
-        title: "Personalised Name Decals",
-        tag: "Vinyl Decal",
-        note: "Clean cut + durable",
-        store: "Made.me",
-        url: "https://made.me/your-shop/another-item",
-      },
+  () => [
+    {
+      title: "Moonlit Resin Coasters",
+      tag: "Resin",
+      note: "Deep blues + gold flecks",
+      store: "Etsy",
+      url: "https://www.etsy.com/listing/XXXXXXXXXX",
+      imageSrc: g1,
+      imageAlt: "Moonlit resin coasters with deep blue tones and gold flecks",
+    },
+    {
+      title: "Felted Bunny Keepsake",
+      tag: "Needle Felt",
+      note: "Soft texture, tiny details",
+      store: "Made.me",
+      url: "https://made.me/your-shop/your-item-slug",
+      imageSrc: g2,
+      imageAlt: "Needle-felted bunny keepsake with soft texture",
+    },
+    {
+      title: "Custom 3D Printed Charm",
+      tag: "3D Print",
+      note: "Designed from sketch to print",
+      store: "Etsy",
+      url: "https://www.etsy.com/listing/YYYYYYYYYY",
+      imageSrc: g3,
+      imageAlt: "Custom 3D printed charm",
+    },
+    {
+      title: "Personalised Name Decals",
+      tag: "Vinyl Decal",
+      note: "Clean cut + durable",
+      store: "Made.me",
+      url: "https://made.me/your-shop/another-item",
+      imageSrc: g4,
+      imageAlt: "Vinyl decal name labels in a clean style",
+    },
     ],
     []
   );
+
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -102,6 +121,12 @@ export default function App() {
           </button>
 
           <nav className="navDesktop" aria-label="Primary navigation">
+            <a className="shopBtn" href={ETSY_SHOP_URL} target="_blank" rel="noreferrer">
+              Shop on Etsy ↗
+            </a>
+            <a className="shopBtn" href={MADE_SHOP_URL} target="_blank" rel="noreferrer">
+              Shop on Made.me ↗
+            </a>
             <button className="navLink" onClick={() => scrollTo("services")}>Services</button>
             <button className="navLink" onClick={() => scrollTo("process")}>Process</button>
             <button className="navLink" onClick={() => scrollTo("gallery")}>Gallery</button>
@@ -278,17 +303,16 @@ export default function App() {
                 aria-label={`Open ${g.title} on ${g.store}`}
                 title={`View on ${g.store}`}
               >
-                <div className="galleryThumb" aria-hidden="true">
-                  <div className="galleryThumbInner">
+                <div className="galleryImageWrap">
+                  <img className="galleryImage" src={g.imageSrc} alt={g.imageAlt} loading="lazy" />
+                  <div className="galleryOverlay">
                     <span className="galleryTag">{g.tag}</span>
-                    <span className="gallerySparkle">✦</span>
-                  </div>
-                </div>
-                <div className="galleryBody">
-                  <div className="galleryTitleRow">
-                    <div className="galleryTitle">{g.title}</div>
                     <span className="storePill">{g.store}</span>
                   </div>
+                </div>
+
+                <div className="galleryBody">
+                  <div className="galleryTitle">{g.title}</div>
                   <div className="smallText">{g.note}</div>
                   <div className="viewLink">View item →</div>
                 </div>
@@ -373,8 +397,8 @@ export default function App() {
                   <a className="socialLink" href="#" onClick={(e) => e.preventDefault()}>
                     Etsy → DreamImporium
                   </a>
-                  <a className="socialLink" href="#" onClick={(e) => e.preventDefault()}>
-                    Email → hello@dreamimporium.com
+                  <a className="socialLink" href="mailto:contact@dreamimporium.com">
+                    Email → contact@dreamimporium.com
                   </a>
                 </div>
               </div>
